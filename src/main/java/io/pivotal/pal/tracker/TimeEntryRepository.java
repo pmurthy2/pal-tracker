@@ -7,7 +7,7 @@ public interface TimeEntryRepository {
 
     TimeEntry create(TimeEntry timeEntry);
 
-    TimeEntry find (long id);
+    TimeEntry find (Long id);
 
     List<TimeEntry> list();
 
