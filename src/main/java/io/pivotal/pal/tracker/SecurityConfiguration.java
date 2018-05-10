@@ -26,8 +26,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             http.requiresChannel().anyRequest().requiresSecure();
         }
 
-        http
-                .authorizeRequests().antMatchers("/**").hasRole("USER")
+        //http.authorizeRequests().antMatchers("/time-entries/**").anonymous();
+        http.authorizeRequests().antMatchers("/**").hasRole("USER")
                 .and()
                 .httpBasic()
                 .and()
