@@ -1,11 +1,16 @@
 package test.pivotal.pal.trackerapi;
 
 import io.pivotal.pal.tracker.PalTrackerApplication;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,12 +20,40 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(classes = PalTrackerApplication.class, webEnvironment = RANDOM_PORT)
 public class WelcomeApiTest {
 
+    @LocalServerPort
+    private String port;
+
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private TestRestTemplate restTemplateFailure;
+
+    @Before
+    public void setUp() throws Exception {
+        RestTemplateBuilder builder = new RestTemplateBuilder()
+                .rootUri("http://localhost:" + port)
+                .basicAuthorization("test", "test");
+
+        restTemplate = new TestRestTemplate(builder);
+    }
+    @Before
+    public void setup1() throws Exception {
+        RestTemplateBuilder builder = new RestTemplateBuilder()
+                .rootUri("http://localhost:" + port)
+                .basicAuthorization("test1", "test1");
+
+        restTemplateFailure = new TestRestTemplate(builder);
+    }
 
     @Test
     public void exampleTest() {
         String body = this.restTemplate.getForObject("/", String.class);
         assertThat(body).isEqualTo("Hello from test");
+    }
+    @Test
+    public void exampleTestFailure() {
+        ResponseEntity<String> response= this.restTemplateFailure.getForEntity("/", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 }
