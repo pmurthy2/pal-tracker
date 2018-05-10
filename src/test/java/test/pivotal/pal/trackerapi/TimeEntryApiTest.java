@@ -49,11 +49,9 @@ public class TimeEntryApiTest {
 
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
-
-
         RestTemplateBuilder builder = new RestTemplateBuilder()
                 .rootUri("http://localhost:" + port)
-                .basicAuthorization("test", "test");
+                .basicAuthorization("user", "password");
 
         restTemplate = new TestRestTemplate(builder);
     }

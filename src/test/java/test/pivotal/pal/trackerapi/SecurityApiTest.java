@@ -32,7 +32,7 @@ public class SecurityApiTest {
     public void setUp() throws Exception {
         RestTemplateBuilder builder = new RestTemplateBuilder()
             .rootUri("http://localhost:" + port)
-            .basicAuthorization("test", "test");
+            .basicAuthorization("user", "password");
 
         authorizedRestTemplate = new TestRestTemplate(builder);
     }/*
